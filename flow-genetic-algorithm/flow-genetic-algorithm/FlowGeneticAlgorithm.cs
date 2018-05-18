@@ -12,10 +12,16 @@ namespace flow_genetic_algorithm
 {
     public class FlowGeneticAlgorithm
     {
+        #region Data Members
+
         private Models.Task[] tasks;
         private User[] users;
         private Dictionary<User, Calendar> calendars;
-        private Board board;
+        private Board board; 
+
+        #endregion
+
+        #region Ctor
 
         public FlowGeneticAlgorithm(Board board, Dictionary<User, Calendar> calendars)
         {
@@ -23,25 +29,14 @@ namespace flow_genetic_algorithm
             this.users = board.boardMembers.ToArray<User>();
             this.calendars = calendars;
             this.board = board;
-        }
+        } 
+        
+        #endregion
 
-        public Board GetBoardSuggestion(Board currentBoard)
+        #region Public Methods
+
+        public Board GetBoardSuggestion()
         {
-            return null;
-        }
-
-        private void Run()
-        {
-            //get our cities
-            //_cities = CreateCities().ToList();
-
-            //Each city can be identified by an integer within the range 0-15
-            //our chromosome is a special case as it needs to contain each city 
-            //only once. Therefore, our chromosome will contain all the integers
-            //between 0 and 15 with no duplicates.
-
-            //We can create an empty population as we will be creating the 
-            //initial solutions manually.
             var population = new Population();
 
             //create the chromosomes
@@ -84,22 +79,25 @@ namespace flow_genetic_algorithm
 
             //run the GA
             ga.Run(Terminate);
-        }
+
+            return createBoardFromChromose(ga.Population.GetTop(1).First());
+        } 
+
+        #endregion
+
+        #region Private Methods
 
         private void ga_OnRunComplete(object sender, GaEventArgs e)
         {
-            /*var fittest = e.Population.GetTop(1)[0];
-            foreach (var gene in fittest.Genes)
-            {
-                Console.WriteLine(_cities[(int)gene.RealValue].Name);
-            }*/
+            var fittest = e.Population.GetTop(1)[0];
+            Console.Write(fittest.FitnessNormalised);
         }
 
         private void ga_OnGenerationComplete(object sender, GaEventArgs e)
         {
             var fittest = e.Population.GetTop(1)[0];
-            Console.Write(fittest.FitnessNormalised);                        
-        }        
+            Console.Write(fittest.FitnessNormalised);
+        }
 
         private double CalculateFitness(Chromosome chromosome)
         {
@@ -223,12 +221,13 @@ namespace flow_genetic_algorithm
             }
 
             return usersTasks;
-        }        
+        }
 
         private bool Terminate(Population population, int currentGeneration, long currentEvaluation)
         {
             return currentGeneration > 400;
-        }
-
+        } 
+        
+        #endregion
     }
 }
