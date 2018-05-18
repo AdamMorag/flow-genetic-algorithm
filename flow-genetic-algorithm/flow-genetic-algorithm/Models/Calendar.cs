@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace flow_genetic_algorithm.Models
 {    
-    public class Calendar
+    public class Calendar : ICloneable
     {
 
         [JsonProperty]
@@ -22,6 +22,16 @@ namespace flow_genetic_algorithm.Models
         public Calendar()
         {
             this.events = new List<Event>();
+        }
+
+        public object Clone()
+        {
+            return new Calendar()
+            {
+                _id = this._id,
+                uid = this.uid,
+                events = this.events
+            };
         }
     }
 }

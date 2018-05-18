@@ -31,6 +31,10 @@ namespace flow_genetic_algorithm.Models
         public double remainingTime { get; set; }
 
         [JsonProperty]
-        public User owner { get; set; }        
+        public User owner { get; set; }
+
+        public DateTime StartTime { get; set; }
+
+        public DateTime EndTime { get; set; }
     }
 }

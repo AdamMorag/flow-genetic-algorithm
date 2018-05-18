@@ -9,8 +9,9 @@ namespace flow_genetic_algorithm.Controllers
 {
     public class GaController : ApiController
     {
-        [Route("Example")]
-        public string GetExample()
+        [Route("RunGA")]
+        [HttpPost]
+        public string PostRunGA()
         {
             var gaf = new GafExample();
             return gaf.Test().ToString();

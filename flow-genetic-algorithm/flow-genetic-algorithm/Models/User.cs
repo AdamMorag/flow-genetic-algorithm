@@ -30,5 +30,15 @@ namespace flow_genetic_algorithm
         {
             this.taskBestTiming = new Dictionary<string, Event>();
         }
+
+        public override int GetHashCode()
+        {
+            return this.uid.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
     }
 }

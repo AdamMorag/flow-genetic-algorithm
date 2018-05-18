@@ -90,8 +90,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\ExampleController.cs" />
+    <Compile Include="Controllers\GaController.cs" />
     <Compile Include="GafExample.cs" />
+    <Compile Include="FlowGeneticAlgorithm.cs" />
     <Compile Include="Models\Board.cs" />
     <Compile Include="Models\Calendar.cs" />
     <Compile Include="Models\Event.cs" />
