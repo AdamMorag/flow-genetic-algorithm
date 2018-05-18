@@ -16,14 +16,14 @@ namespace flow_genetic_algorithm
 
         private Models.Task[] tasks;
         private User[] users;
-        private Dictionary<User, Calendar> calendars;
+        private Dictionary<string, Calendar> calendars;
         private Board board; 
 
         #endregion
 
         #region Ctor
 
-        public FlowGeneticAlgorithm(Board board, Dictionary<User, Calendar> calendars)
+        public FlowGeneticAlgorithm(Board board, Dictionary<string, Calendar> calendars)
         {
             this.tasks = board.tasks.ToArray();
             this.users = board.boardMembers.ToArray<User>();
@@ -136,8 +136,8 @@ namespace flow_genetic_algorithm
 
             foreach (var userTasks in usersTasks)
             {
-                var userCalendar = this.calendars.ContainsKey(userTasks.Key) ?
-                    (Calendar)this.calendars[userTasks.Key].Clone() : new Calendar();
+                var userCalendar = this.calendars.ContainsKey(userTasks.Key.uid) ?
+                    (Calendar)this.calendars[userTasks.Key.uid].Clone() : new Calendar();
 
                 foreach (var task in userTasks.Value)
                 {

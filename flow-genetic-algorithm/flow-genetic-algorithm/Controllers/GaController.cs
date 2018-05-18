@@ -1,4 +1,5 @@
-﻿using System;
+﻿using flow_genetic_algorithm.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,10 +12,10 @@ namespace flow_genetic_algorithm.Controllers
     {
         [Route("RunGA")]
         [HttpPost]
-        public string PostRunGA()
-        {
-            var gaf = new GafExample();
-            return gaf.Test().ToString();
+        public Board PostRunGA(BoardSuggestionRequest request)
+        {            
+            var gaf = new FlowGeneticAlgorithm(request.board, request.usersCalendars);
+            return gaf.GetBoardSuggestion();
         }
     }
 }

@@ -94,6 +94,7 @@
     <Compile Include="GafExample.cs" />
     <Compile Include="FlowGeneticAlgorithm.cs" />
     <Compile Include="Models\Board.cs" />
+    <Compile Include="Models\BoardSuggestionRequest.cs" />
     <Compile Include="Models\Calendar.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\Task.cs" />
