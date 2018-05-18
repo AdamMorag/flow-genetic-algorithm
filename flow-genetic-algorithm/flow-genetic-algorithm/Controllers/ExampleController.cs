@@ -7,12 +7,13 @@ using System.Web.Http;
 
 namespace flow_genetic_algorithm.Controllers
 {
-    public class ExampleController : ApiController
+    public class GaController : ApiController
     {
         [Route("Example")]
         public string GetExample()
         {
-            return "Example";
+            var gaf = new GafExample();
+            return gaf.Test().ToString();
         }
     }
 }
