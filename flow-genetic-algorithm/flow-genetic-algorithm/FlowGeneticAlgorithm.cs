@@ -39,13 +39,15 @@ namespace flow_genetic_algorithm
         {
             var population = new Population();
 
+            var randomGen = new Random();
+
             //create the chromosomes
             for (var p = 0; p < 100; p++)
             {
-                var chromosome = new Chromosome();
+                var chromosome = new Chromosome();                
                 for (var g = 0; g < this.tasks.Length; g++)
                 {
-                    chromosome.Genes.Add(new Gene(new Random().Next(0, this.users.Length)));
+                    chromosome.Genes.Add(new Gene(randomGen.Next(0, this.users.Length)));
                 }
 
                 chromosome.Genes.ShuffleFast();
@@ -59,7 +61,7 @@ namespace flow_genetic_algorithm
             //create the crossover operator
             var crossover = new Crossover(0.8)
             {
-                CrossoverType = CrossoverType.DoublePoint
+                CrossoverType = CrossoverType.SinglePoint
             };
 
             //create the mutation operator
@@ -90,13 +92,14 @@ namespace flow_genetic_algorithm
         private void ga_OnRunComplete(object sender, GaEventArgs e)
         {
             var fittest = e.Population.GetTop(1)[0];
-            Console.Write(fittest.FitnessNormalised);
+            Console.Write(fittest.Fitness);
         }
 
         private void ga_OnGenerationComplete(object sender, GaEventArgs e)
-        {
+        {            
             var fittest = e.Population.GetTop(1)[0];
-            Console.Write(fittest.FitnessNormalised);
+            Console.Write(string.Format("Generation:{0}, Popolation: {1} ,Fitness: {2}\n", e.Generation, e.Population.Solutions.Count ,fittest.Fitness));
+            
         }
 
         private double CalculateFitness(Chromosome chromosome)
@@ -107,7 +110,7 @@ namespace flow_genetic_algorithm
         }
 
         private double calculateBoardFitness(Board board)
-        {
+        {            
             var maxTask = board.tasks.Max(t => t.EndTime);
 
             if (maxTask > board.endDate)
@@ -131,6 +134,7 @@ namespace flow_genetic_algorithm
             var board = new Board();
             board.startDate = this.board.startDate;
             board.endDate = this.board.endDate;
+            board.tasks = new List<Models.Task>();
 
             var usersTasks = getTasksDistribution(chromosome);
 
@@ -141,7 +145,7 @@ namespace flow_genetic_algorithm
 
                 foreach (var task in userTasks.Value)
                 {
-                    placeTaskInBoard(board, userCalendar, task);
+                    placeTaskInBoard(board, userCalendar, task, userTasks.Key);
                 }
 
             }
@@ -149,7 +153,7 @@ namespace flow_genetic_algorithm
             return board;
         }
 
-        private void placeTaskInBoard(Board board, Calendar userCalendar, Models.Task task)
+        private void placeTaskInBoard(Board board, Calendar userCalendar, Models.Task task, User user)
         {
             var relevantEvents = getRelevantEvents(board, userCalendar);
 
@@ -180,7 +184,7 @@ namespace flow_genetic_algorithm
             {
                 boardId = task.boardId,
                 boardName = task.boardName,
-                owner = task.owner,
+                owner = user,
                 overallTime = task.overallTime,
                 remainingTime = task.remainingTime,
                 status = task.status,
@@ -225,7 +229,7 @@ namespace flow_genetic_algorithm
 
         private bool Terminate(Population population, int currentGeneration, long currentEvaluation)
         {
-            return currentGeneration > 400;
+            return currentGeneration > 100;
         } 
         
         #endregion
