@@ -33,10 +33,10 @@ namespace flow_genetic_algorithm.Models
         [JsonProperty]
         public User owner { get; set; }
 
-        [JsonIgnore]
-        public DateTime StartTime { get; set; }
+        [JsonProperty]
+        public DateTime startTime { get; set; }
 
-        [JsonIgnore]
-        public DateTime EndTime { get; set; }
+        [JsonProperty]
+        public DateTime endTime { get; set; }
     }
 }

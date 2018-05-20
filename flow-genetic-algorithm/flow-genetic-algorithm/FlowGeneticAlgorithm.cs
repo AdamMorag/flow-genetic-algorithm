@@ -111,7 +111,7 @@ namespace flow_genetic_algorithm
 
         private double calculateBoardFitness(Board board)
         {            
-            var maxTask = board.tasks.Max(t => t.EndTime);
+            var maxTask = board.tasks.Max(t => t.endTime);
 
             if (maxTask > board.endDate)
                 return 0;
@@ -190,8 +190,8 @@ namespace flow_genetic_algorithm
                 status = task.status,
                 taskId = task.taskId,
                 title = task.title,
-                StartTime = newEvent.startDate.ToLocalTime(),
-                EndTime = newEvent.endDate.ToLocalTime()
+                startTime = newEvent.startDate.ToLocalTime(),
+                endTime = newEvent.endDate.ToLocalTime()
             });
         }
 

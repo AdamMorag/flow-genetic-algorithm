@@ -21,14 +21,10 @@ namespace flow_genetic_algorithm
         public string image { get; set; }
 
         [JsonProperty]
-        public string color { get; set; }
-
-
-        public Dictionary<string, Event> taskBestTiming { get; set; }
+        public string color { get; set; }        
 
         public User()
-        {
-            this.taskBestTiming = new Dictionary<string, Event>();
+        {            
         }
 
         public override int GetHashCode()
