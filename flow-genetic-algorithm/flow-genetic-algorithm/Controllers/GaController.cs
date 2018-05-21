@@ -12,11 +12,10 @@ namespace flow_genetic_algorithm.Controllers
     {
         [Route("RunGA")]
         [HttpPost]
-        public Dictionary<string, List<Models.Task>> PostRunGA(BoardSuggestionRequest request)
+        public Board PostRunGA(BoardSuggestionRequest request)
         {            
             var gaf = new FlowGeneticAlgorithm(request.board, request.usersCalendars);
-            return gaf.GetBoardSuggestion().tasks.GroupBy(t => t.owner.uid).
-                ToDictionary(k => k.Key, v => v.ToList());
+            return gaf.GetBoardSuggestion();
         }
     }
 }

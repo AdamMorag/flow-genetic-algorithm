@@ -13,6 +13,6 @@ namespace flow_genetic_algorithm.Models
         public Board board { get; set; }
 
         [JsonProperty]
-        public Dictionary<string, Calendar> usersCalendars { get; set; }
+        public IEnumerable<Calendar> usersCalendars { get; set; }
     }
 }

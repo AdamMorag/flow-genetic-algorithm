@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using GAF;
 using GAF.Operators;
 using GAF.Extensions;
+using System.Diagnostics;
 
 namespace flow_genetic_algorithm
 {
@@ -17,18 +18,20 @@ namespace flow_genetic_algorithm
         private Models.Task[] tasks;
         private User[] users;
         private Dictionary<string, Calendar> calendars;
-        private Board board; 
+        private Board board;
+        private Stopwatch watch;
 
         #endregion
 
         #region Ctor
 
-        public FlowGeneticAlgorithm(Board board, Dictionary<string, Calendar> calendars)
+        public FlowGeneticAlgorithm(Board board, IEnumerable<Calendar> calendars)
         {
-            this.tasks = board.tasks.ToArray();
+            this.tasks = board.tasks.Where(t => t.status != "done").ToArray();
             this.users = board.boardMembers.ToArray<User>();
-            this.calendars = calendars;
+            this.calendars = calendars.ToDictionary<Calendar, string>(k => k.uid);
             this.board = board;
+            this.watch = new Stopwatch();
         } 
         
         #endregion
@@ -79,10 +82,17 @@ namespace flow_genetic_algorithm
             ga.Operators.Add(crossover);
             ga.Operators.Add(mutate);
 
+            this.watch.Start();
+
             //run the GA
             ga.Run(Terminate);
 
-            return createBoardFromChromose(ga.Population.GetTop(1).First());
+            var suggestedBoard = createBoardFromChromose(ga.Population.GetTop(1).First());
+            var doneTasks = board.tasks.Where(t => t.status.Equals("done"));
+            board.tasks = suggestedBoard.tasks;
+            board.tasks.AddRange(doneTasks);
+
+            return board;    
         } 
 
         #endregion
@@ -132,8 +142,8 @@ namespace flow_genetic_algorithm
         private Board createBoardFromChromose(Chromosome chromosome)
         {
             var board = new Board();
-            board.startDate = this.board.startDate;
-            board.endDate = this.board.endDate;
+            board.startDate = this.board.startDate.ToLocalTime();
+            board.endDate = this.board.endDate.ToLocalTime();
             board.tasks = new List<Models.Task>();
 
             var usersTasks = getTasksDistribution(chromosome);
@@ -229,7 +239,7 @@ namespace flow_genetic_algorithm
 
         private bool Terminate(Population population, int currentGeneration, long currentEvaluation)
         {
-            return currentGeneration > 100;
+            return currentGeneration > 100 || this.watch.Elapsed.TotalSeconds > 30;
         } 
         
         #endregion
