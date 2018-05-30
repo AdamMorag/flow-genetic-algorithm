@@ -30,7 +30,12 @@ namespace flow_genetic_algorithm.Models
             {
                 _id = this._id,
                 uid = this.uid,
-                events = this.events
+                events = this.events.Select(e => new Event() {
+                    eventId = e.eventId,
+                    title = e.title,
+                    startDate = e.startDate,
+                    endDate = e.endDate
+                }).ToList()
             };
         }
     }
